@@ -1,0 +1,36 @@
+namespace org.cyient.blockchain
+
+asset ProducersChemical identified by chemicalId {
+  o String chemicalId
+  --> Producer producer
+  o String name
+  o Integer quantity
+}
+
+asset FarmersChemical identified by chemicalId {
+  o String chemicalId
+  --> Farmer farmer
+  --> Producer producer
+  o String name
+  o Integer quantity
+}
+
+participant Producer identified by producerId {
+  o String producerId
+  o String name
+}
+
+participant Farmer identified by farmerId {
+  o String farmerId
+  o String name
+}
+
+transaction BuyChemical {
+  --> ProducersChemical producerChemical
+  --> Farmer farmer
+  o Integer quantity
+}
+
+event SampleEvent {
+  o String message
+}

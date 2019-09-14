@@ -1,0 +1,83 @@
+rule FarmerCanAccessHisProfile{
+    description: "Allow the farmer to see his profile"
+    participant(m): "org.cyient.blockchain.Farmer"
+    operation:ALL
+    resource(v): "org.cyient.blockchain.Farmer"
+    condition: (v.getIdentifier() == m.getIdentifier())
+    action: ALLOW
+}
+
+rule ProducerCanAccessHisProfile{
+    description: "Allow the producer to see his profile"
+    participant(m): "org.cyient.blockchain.Producer"
+    operation:ALL
+    resource(v): "org.cyient.blockchain.Producer"
+    condition: (v.getIdentifier() == m.getIdentifier())
+    action: ALLOW
+}
+
+rule FarmerCanSubmitTransactions {
+    description: "Allow farmer to submit transactions"
+    participant: "org.cyient.blockchain.Farmer"
+    operation: CREATE
+    resource: "org.cyient.blockchain.BuyChemical"
+    action: ALLOW
+}
+
+rule FarmerViewTransactions {
+    description: "Allow farmer to submit transactions"
+    participant: "org.cyient.blockchain.Farmer"
+    operation: READ
+    resource: "org.cyient.blockchain.BuyChemical"
+    action: ALLOW
+}
+
+rule ProducerHasFullAccessToTheirAssets {
+    description: "Allow producers full access to their assets"
+    participant(p): "org.cyient.blockchain.Producer"
+    operation: ALL
+    resource(r): "org.cyient.blockchain.ProducersChemical"
+    condition: (r.producer.getIdentifier() === p.getIdentifier())
+    action: ALLOW
+}
+
+rule FarmerHasFullAccessToTheirAssets {
+    description: "Allow farmers full access to their assets"
+    participant(p): "org.cyient.blockchain.Farmer"
+    operation: ALL
+    resource(r): "org.cyient.blockchain.FarmersChemical"
+    condition: (r.farmer.getIdentifier() === p.getIdentifier())
+    action: ALLOW
+}
+
+rule FarmerHasReadAndUpdateAccesstoProducersAsset {
+    description: "Allow farmers read and update access to producers assets"
+    participant: "org.cyient.blockchain.Farmer"
+    operation: READ,UPDATE
+    resource: "org.cyient.blockchain.ProducersChemical"
+    action: ALLOW
+}
+
+rule SystemACL {
+    description: "System ACL to permit all access"
+    participant: "org.hyperledger.composer.system.Participant"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
